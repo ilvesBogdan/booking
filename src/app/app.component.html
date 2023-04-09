@@ -47,7 +47,7 @@
   <!-- Поле для выбора количества гостей -->
   <div>
     <label for="number-of-guests">{{labelNumberOfGuests}}:</label>
-    <input type="number" size="3" id="number-of-guests" min="1" value="1">
+    <input type="number" size="3" id="number-of-guests" min="1" max="1" value="1">
     <br>
     <span>Обязательно для заполнения</span>
   </div>
@@ -57,11 +57,11 @@
   <div>
     <label for="room-type">{{labelRoomType}}:</label>
     <select id="room-type">
-      <option>Пункт 1</option>
-      <option>Пункт 2</option>
+      <option id="id-room-type-0">Тип номера 1</option>
+      <option id="id-room-type-1">Тип номера 2</option>
+      <option id="id-room-type-2">Тип номера 3</option>
+      <option id="id-room-type-3">Тип номера 4</option>
     </select>
-    <br>
-    <span>Обязательно для заполнения</span>
   </div>
 
   <!-- Поле для выбора даты заезда -->

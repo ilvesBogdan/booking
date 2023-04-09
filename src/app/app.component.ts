@@ -1,4 +1,5 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
+import * as get from 'src/app/app.getValues';
 
 @Component({
   selector: 'app-main-from',
@@ -18,7 +19,7 @@ export class AppComponent {
   labelDepartureDate = 'Дата выезда';
   labelWithAnAnimals = 'С животным';
   labelButton = 'Забронировать';
-  actionButton = submitEvent
+  actionButton = submitEvent;
 }
 
 const submitEvent = () => {
@@ -32,35 +33,53 @@ const submitEvent = () => {
   const elemDepartureDate = document.getElementById("departure-date");
   const elemWithAnAnimals = document.getElementById("with-animals");
 
-  const validName = validationOnlyLetter(elemName);
-  if (validName) undisplayAlert(elemName?.parentElement);
-  else displayAlert(elemName?.parentElement);
-  
-  const validSurname = validationOnlyLetter(elemSurname);
-  if (validSurname) undisplayAlert(elemSurname?.parentElement);
-  else displayAlert(elemSurname?.parentElement);
-  
-  const validPatronymic = validationOnlyLetter(elemPatronymic);
-  if (validPatronymic) undisplayAlert(elemPatronymic?.parentElement);
-  else displayAlert(elemPatronymic?.parentElement);
+  // Текстовые поля, обязательные для заполнения
+  [elemName, elemSurname, elemPatronymic].forEach((elem) => {
+    const [valid, strLenght] = validationOnlyLetter(elem);
+    if (strLenght < 1) {
+      displayAlert(elem?.parentElement, false);
+      return;
+    }
+    if (valid) undisplayAlert(elem?.parentElement);
+    else displayAlert(elem?.parentElement);
+  });
+
+  // Получаем дату рождения
+  get.date(elemDateOfBirth);
+
+  // Получаем кол-во гостей
+  get.number(elemNumberOfGuests);
+
+  // Поллучаем тип номера
+  get.selectedElement(elemRoomType);
+
+  // Получаем можно ли с животными
+  get.checked(elemWithAnAnimals);
 }
 
-function displayAlert(elem: HTMLElement | null | undefined) {
+const eventRemoveAlert = (event: Event) => { undisplayAlert(get.parentElementByEvent(event)) }
+
+function displayAlert(elem: HTMLElement | null | undefined, isRequired: boolean = true) {
   if (elem === null || elem === undefined) return;
-  if (!elem.classList.contains("error"))
-    elem.classList.add("error");
+  const className: string = isRequired ? "error" : "is-required";
+  if (!elem.classList.contains(className))
+    elem.classList.add(className);
+  elem.addEventListener('change', eventRemoveAlert)
 }
 
 function undisplayAlert(elem: HTMLElement | null | undefined) {
   if (elem === null || elem === undefined) return;
+  elem.removeEventListener('change', eventRemoveAlert);
   if (elem.classList.contains("error"))
     elem.classList.remove("error");
+  if (elem.classList.contains("is-required"))
+    elem.classList.remove("is-required");
 }
 
-function validationOnlyLetter(elem: HTMLElement | null): boolean {
-  if (elem === null) return true;
-  const str = elem.textContent;
-  if (str === null) return true;
+function validationOnlyLetter(elem: HTMLElement | null): [boolean, number] {
+  if (elem === null) return [true, 0];
+  const str = (<HTMLInputElement>elem).value;
+  if (str.length < 1) return [true, str.length];
   const regex = /^[A-Za-zА-Яа-я]+$/;
-  return regex.test(str);
+  return [regex.test(str), str.length];
 }
