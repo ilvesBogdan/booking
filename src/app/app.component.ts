@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import * as get from 'src/app/app.getValues';
 import * as validation from 'src/app/app.validLogic';
+import { Reservation } from 'src/app/app.sendData';
 
 @Component({
   selector: 'app-main-from',
@@ -48,17 +49,86 @@ const submitEvent = () => {
     else displayAlert(elem?.parentElement);
   });
 
-  // Получаем дату рождения
-  get.date(elemDateOfBirth);
+  // Поллучаем тип номера
+  const roomTypeId = ((): number | undefined => {
+    const str = get.selectedElement(elemRoomType);
+    if (str === undefined) return undefined;
+    return parseInt(str.match(/\d+/)![0], 10)
+  })();
+  if (roomTypeId === undefined) {
+    alert("Ошибка получения данных о типе номера.")
+    return;
+  }
 
   // Получаем кол-во гостей
-  get.number(elemNumberOfGuests);
+  const countOfGuests = get.number(elemNumberOfGuests);
+  if (countOfGuests === undefined) {
+    alert("Ошибка получения данных о количестве гостей.")
+    return;
+  }
 
-  // Поллучаем тип номера
-  get.selectedElement(elemRoomType);
+  // Получаем дату заселения
+  const startDate = ((): string | undefined => {
+    const date = get.date(elemArrivalDate);
+    if (date === undefined) return undefined;
+    return date.toISOString().slice(0, 10);
+  })();
+  if (startDate === undefined) {
+    alert("Ошибка получения данных о заезде.")
+    return;
+  }
+
+  // Получаем дату выселения
+  const endDate = ((): string | undefined => {
+    const date = get.date(elemDepartureDate);
+    if (date === undefined) return undefined;
+    return date.toISOString().slice(0, 10);
+  })();
+  if (endDate === undefined) {
+    alert("Ошибка получения данных о выезде.")
+    return;
+  }
 
   // Получаем можно ли с животными
-  get.checked(elemWithAnAnimals);
+  const withAnimal = get.checked(elemWithAnAnimals);
+  if (withAnimal === undefined) {
+    alert("Ошибка получения данных о заселении с животным.")
+    return;
+  }
+
+  // Данные о пользователе
+  const firstName = (<HTMLInputElement>elemName).value;
+  const lastName = (<HTMLInputElement>elemSurname).value;
+  const patronymicName = (<HTMLInputElement>elemPatronymic).value;
+  const birthday = ((): string | undefined => {
+    const date = get.date(elemDateOfBirth);
+    if (date === undefined) return undefined;
+    return date.toISOString().slice(0, 10);
+  })();
+  if (birthday === undefined) {
+    alert("Ошибка получения данных о дате рождения постояльца.")
+    return;
+  }
+
+  // Проверка заполнености полей перед оправкой
+  // todo
+
+  const reservation: Reservation = {
+    roomTypeId: roomTypeId,
+    countOfGuests: countOfGuests,
+    startDate: startDate,
+    endDate: endDate,
+    withAnimal: withAnimal,
+    user: {
+      firstName: firstName,
+      lastName: lastName,
+      patronymicName: patronymicName,
+      birthday: birthday
+    }
+  };
+
+  // Отправка данных на сервер
+  console.log(reservation);
 }
 
 const eventRemoveAlert = (event: Event) => { undisplayAlert(get.parentElementByEvent(event)) };
