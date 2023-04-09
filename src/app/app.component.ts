@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import * as get from 'src/app/app.getValues';
+import * as validation from 'src/app/app.validLogic';
 
 @Component({
   selector: 'app-main-from',
@@ -19,6 +20,9 @@ export class AppComponent {
   labelDepartureDate = 'Дата выезда';
   labelWithAnAnimals = 'С животным';
   labelButton = 'Забронировать';
+
+  getCurrentDate = getCurrentDate;
+  changeTypeRoom = changeTypeRoom;
   actionButton = submitEvent;
 }
 
@@ -35,7 +39,7 @@ const submitEvent = () => {
 
   // Текстовые поля, обязательные для заполнения
   [elemName, elemSurname, elemPatronymic].forEach((elem) => {
-    const [valid, strLenght] = validationOnlyLetter(elem);
+    const [valid, strLenght] = validation.onlyLetter(elem);
     if (strLenght < 1) {
       displayAlert(elem?.parentElement, false);
       return;
@@ -57,9 +61,60 @@ const submitEvent = () => {
   get.checked(elemWithAnAnimals);
 }
 
-const eventRemoveAlert = (event: Event) => { undisplayAlert(get.parentElementByEvent(event)) }
+const eventRemoveAlert = (event: Event) => { undisplayAlert(get.parentElementByEvent(event)) };
 
-function displayAlert(elem: HTMLElement | null | undefined, isRequired: boolean = true) {
+const getCurrentDate = (days: number = 0): string => {
+  const date = new Date();
+  date.setDate(date.getDate() + days);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+const changeTypeRoom = () => {
+  const elemNumberOfGuests = <HTMLInputElement>document.getElementById("number-of-guests");
+  const elemWithAnAnimals = <HTMLInputElement>document.getElementById("with-animals");
+  switch (get.selectedElement(document.getElementById("room-type") as HTMLElement)) {
+    case "id-room-type-0":
+      elemNumberOfGuests.value = "1";
+      elemNumberOfGuests.max = "1";
+      elemNumberOfGuests.disabled = true;
+      elemWithAnAnimals.disabled = false;
+      break;
+    case "id-room-type-1":
+      if (parseInt(elemNumberOfGuests.value) > 2)
+        elemNumberOfGuests.value = "2"
+      elemNumberOfGuests.max = "2";
+      elemNumberOfGuests.disabled = false;
+      elemWithAnAnimals.disabled = false;
+      break;
+    case "id-room-type-2":
+      if (parseInt(elemNumberOfGuests.value) > 4)
+        elemNumberOfGuests.value = "4"
+      elemNumberOfGuests.max = "4";
+      elemNumberOfGuests.disabled = false;
+      elemWithAnAnimals.disabled = false;
+      break;
+    case "id-room-type-3":
+      if (parseInt(elemNumberOfGuests.value) > 6)
+        elemNumberOfGuests.value = "6"
+      elemNumberOfGuests.max = "6";
+      elemNumberOfGuests.disabled = false;
+      elemWithAnAnimals.disabled = false;
+      break;
+    case "id-room-type-4":
+      if (parseInt(elemNumberOfGuests.value) > 2)
+        elemNumberOfGuests.value = "2"
+      elemNumberOfGuests.max = "2";
+      elemNumberOfGuests.disabled = false;
+      elemWithAnAnimals.disabled = true;
+      elemWithAnAnimals.checked = false;
+      break;
+  }
+}
+
+const displayAlert = (elem: HTMLElement | null | undefined, isRequired: boolean = true) => {
   if (elem === null || elem === undefined) return;
   const className: string = isRequired ? "error" : "is-required";
   if (!elem.classList.contains(className))
@@ -67,19 +122,11 @@ function displayAlert(elem: HTMLElement | null | undefined, isRequired: boolean 
   elem.addEventListener('change', eventRemoveAlert)
 }
 
-function undisplayAlert(elem: HTMLElement | null | undefined) {
+const undisplayAlert = (elem: HTMLElement | null | undefined) => {
   if (elem === null || elem === undefined) return;
   elem.removeEventListener('change', eventRemoveAlert);
   if (elem.classList.contains("error"))
     elem.classList.remove("error");
   if (elem.classList.contains("is-required"))
     elem.classList.remove("is-required");
-}
-
-function validationOnlyLetter(elem: HTMLElement | null): [boolean, number] {
-  if (elem === null) return [true, 0];
-  const str = (<HTMLInputElement>elem).value;
-  if (str.length < 1) return [true, str.length];
-  const regex = /^[A-Za-zА-Яа-я]+$/;
-  return [regex.test(str), str.length];
 }

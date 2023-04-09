@@ -47,7 +47,7 @@
   <!-- Поле для выбора количества гостей -->
   <div>
     <label for="number-of-guests">{{labelNumberOfGuests}}:</label>
-    <input type="number" size="3" id="number-of-guests" min="1" max="1" value="1">
+    <input type="number" size="3" id="number-of-guests" min="1" max="1" value="1" disabled>
     <br>
     <span>Обязательно для заполнения</span>
   </div>
@@ -56,18 +56,19 @@
   <!-- Поле для выбора типа номера -->
   <div>
     <label for="room-type">{{labelRoomType}}:</label>
-    <select id="room-type">
+    <select id="room-type" (change)="changeTypeRoom()">
       <option id="id-room-type-0">Тип номера 1</option>
       <option id="id-room-type-1">Тип номера 2</option>
       <option id="id-room-type-2">Тип номера 3</option>
       <option id="id-room-type-3">Тип номера 4</option>
+      <option id="id-room-type-4">Тип номера 5</option>
     </select>
   </div>
 
   <!-- Поле для выбора даты заезда -->
   <div>
     <label for="arrival-date">{{labelArrivalDate}}:</label>
-    <input type="date" id="arrival-date">
+    <input type="date" id="arrival-date" min="{{getCurrentDate()}}">
     <br>
     <span>Обязательно для заполнения</span>
   </div>
@@ -75,7 +76,7 @@
   <!-- Поле для выбора даты выезда -->
   <div>
     <label for="departure-date">{{labelDepartureDate}}:</label>
-    <input type="date" id="departure-date">
+    <input type="date" id="departure-date" min="{{getCurrentDate(1)}}">
     <br>
     <span>Обязательно для заполнения</span>
   </div>
