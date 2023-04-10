@@ -49,6 +49,12 @@ const submitEvent = () => {
     else displayAlert(elem?.parentElement);
   });
 
+  // Поля с вводом даты, обязательные для заполнения
+  [elemDateOfBirth, elemArrivalDate, elemDepartureDate].forEach((elem) => {
+    if ((<HTMLInputElement>elem).value) undisplayAlert(elem?.parentElement);
+    else displayAlert(elem?.parentElement);
+  })
+
   // Поллучаем тип номера
   const roomTypeId = ((): number | undefined => {
     const str = get.selectedElement(elemRoomType);
