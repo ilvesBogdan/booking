@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import * as get from 'src/app/app.getValues';
 import * as validation from 'src/app/app.validLogic';
 import { Reservation } from 'src/app/app.sendData';
+import { roomTypes, roomToTag } from 'src/app/app.typeRooms';
 
 @Component({
   selector: 'app-main-from',
@@ -9,7 +10,7 @@ import { Reservation } from 'src/app/app.sendData';
   styleUrls: ['./app.component.sass']
 })
 
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   title = 'booking';
   labelName = 'Имя';
   labelSurname = 'Фамилия';
@@ -25,6 +26,18 @@ export class AppComponent {
   getCurrentDate = getCurrentDate;
   changeTypeRoom = changeTypeRoom;
   actionButton = submitEvent;
+
+  ngAfterViewInit() {
+    // Заполняем выпадающий список типами номеров
+    (() => {
+      const select = document.getElementById("room-type");
+      if (select === null) return;
+      roomTypes.forEach((room) => {
+        select.appendChild(roomToTag(room));
+      })
+    })();
+  }
+
 }
 
 const submitEvent = () => {
