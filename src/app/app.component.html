@@ -5,24 +5,21 @@
     <div>
       <label for="name">{{labelName}}:</label>
       <input id="name" type="text" formControlName="name">
-      <br>
-      <span>Имя должно содержать только буквы</span>
+      <div><span>Имя должно содержать только буквы</span></div>
     </div>
 
     <!-- Поле для ввода фамилии обязательно для заполнения и может содержать только буквы. -->
     <div>
       <label for="surname">{{labelSurname}}:</label>
       <input id="surname" type="text" formControlName="surname">
-      <br>
-      <span>Фамилия должна содержать только буквы</span>
+      <div><span>Фамилия должна содержать только буквы</span></div>
     </div>
 
     <!-- Поле для ввода отчества не обязательно для заполнения и может содержать только буквы. -->
     <div>
       <label for="patronymic">{{labelPatronymic}}:</label>
       <input id="patronymic" type="text" formControlName="patronymic">
-      <br>
-      <span>Отчество должно содержать только буквы</span>
+      <div><span>Отчество должно содержать только буквы</span></div>
     </div>
 
     <!-- Поле для выбора даты дня рождения может содержать только тип Date. -->
@@ -31,16 +28,14 @@
     <div>
       <label for="date-of-birth">{{labelDateOfBirth}}:</label>
       <input type="date" id="date-of-birth" min="1910-01-01" max="{{getCurrentDate()}}">
-      <br>
-      <span>Обязательно для заполнения</span>
+      <div><span>Обязательно для заполнения</span></div>
     </div>
 
     <!-- Поле для выбора количества гостей -->
     <div>
       <label for="number-of-guests">{{labelNumberOfGuests}}:</label>
       <input type="number" size="3" id="number-of-guests" min="1" max="1" value="1" disabled>
-      <br>
-      <span>Обязательно для заполнения</span>
+      <div><span>Обязательно для заполнения</span></div>
     </div>
 
     <!-- Поле для выбора типа номера должно представлять собой выпадающий список и обязательно для заполнения. -->
@@ -54,16 +49,14 @@
     <div>
       <label for="arrival-date">{{labelArrivalDate}}:</label>
       <input type="date" id="arrival-date" min="{{getCurrentDate()}}">
-      <br>
-      <span>Обязательно для заполнения</span>
+      <div><span>Обязательно для заполнения</span></div>
     </div>
 
     <!-- Поле для выбора даты выезда -->
     <div>
       <label for="departure-date">{{labelDepartureDate}}:</label>
       <input type="date" id="departure-date" min="{{getCurrentDate(1)}}">
-      <br>
-      <span>Обязательно для заполнения</span>
+      <div><span>Обязательно для заполнения</span></div>
     </div>
 
     <!-- Поле для указания проживания с животным должно представлять собой чек-бокс. Данное поле должно быть не доступно для выбора, если в поле для выбора типа номера выбран тип номера с id=4 -->
