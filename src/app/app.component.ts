@@ -111,7 +111,8 @@ const submitEvent = () => {
   }
 
   // Проверка заполнености полей перед оправкой
-  // todo
+  if (document.querySelectorAll(".error, .is-required").length)
+    return;
 
   const reservation: Reservation = {
     roomTypeId: roomTypeId,
