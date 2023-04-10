@@ -1,3 +1,20 @@
+main
+    display: grid
+    gap: 1rem
+    grid-template-columns: 0.75fr 1.25fr
+    grid-template-areas: "foto form" "btn btn"
+
+main > section
+    display: block
+    grid-area: foto
+    background-color: yellow
+
+main > form
+    grid-area: form
+
+main > button
+    grid-area: btn
+
 form > div
     grid-template-areas: "title input" "err err"
     border: 0.2rem solid aliceblue
